@@ -6,9 +6,9 @@ Licence
 -------
 The code in this repository is available under the Apache License.
 
-Copyright (c) 2015 Tobias Ebsen, [www.tobiasebsen.dk](http://tobiasebsen.dk)  
-The Mega Super Awesome Visuals Company
+Copyright (C) 2015 Tobias Ebsen, [www.tobiasebsen.dk](http://tobiasebsen.dk)
 
+Some files are from Art-Net definition authored by Artistic Licence Holdings Ltd.
 Art-Net(TM) Designed by and Copyright Artistic Licence Holdings Ltd.
 
 
