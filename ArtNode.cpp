@@ -69,11 +69,13 @@ void ArtNode::createPollReply() {
     
     reply->NumPortsLo = config->numPorts;
     memcpy(reply->PortTypes, config->portTypes, 4);
+    memset(reply->GoodInput, 0x8, config->numPorts); // Input disabled
     memset(reply->GoodOutput, 0x80, config->numPorts); // Very important for MadMapper!
     memcpy(reply->SwIn, config->portAddrIn, 4);
     memcpy(reply->SwOut, config->portAddrOut, 4);
     reply->Style = StyleNode;
     memcpy(reply->Mac, config->mac, 6);
+    reply->Status2 = 0x8; // Supports 15bit address (ArtNet 3)
 }
 
 void ArtNode::createIpProgReply() {
