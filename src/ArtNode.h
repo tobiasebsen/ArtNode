@@ -78,6 +78,7 @@ public:
     ArtNode(ArtConfig & config, int size, unsigned char * buffer);
     
     ArtConfig * getConfig();
+
     unsigned char* getBufferData();
     unsigned int getBufferSize();
 
