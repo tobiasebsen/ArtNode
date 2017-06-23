@@ -1,0 +1,39 @@
+#######################################
+# Syntax Coloring Map for ArtNode
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+ArtNode		KEYWORD1
+ArtConfig	KEYWORD1
+
+ArtPoll		KEYWORD1
+ArtPollReply	KEYWORD1
+ArtDmx		KEYWORD1
+ArtAddress	KEYWORD1
+ArtIpProg	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+getPort
+createPollReply
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+OpPoll		LITERAL1
+OpPollReply	LITERAL1
+OpDmx		LITERAL1
+OpSync		LITERAL1
+OpAddress	LITERAL1
+OpIpProg	LITERAL1
+
+PortTypeDmx	LITERAL1
+PortTypeMidi	LITERAL1
+PortTypeInput	LITERAL1
+PortTypeOutput	LITERAL1
