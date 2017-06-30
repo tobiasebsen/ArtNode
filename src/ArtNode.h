@@ -67,6 +67,7 @@ typedef T_ArtPoll           ArtPoll;
 typedef T_ArtPollReply      ArtPollReply;
 typedef T_ArtDmx            ArtDmx;
 typedef T_ArtDmxHeader      ArtDmxHeader;
+typedef T_ArtAddress        ArtAddress;
 typedef T_ArtIpProg         ArtIpProg;
 typedef T_ArtIpProgReply    ArtIpProgReply;
 
