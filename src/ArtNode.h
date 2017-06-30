@@ -18,6 +18,8 @@
 
 #pragma pack(1)
 #include "Art-Net.h"
+#include "ArtPollReply.h"
+#include "ArtDmx.h"
 
 #include <inttypes.h>
 
@@ -28,7 +30,7 @@
 
 typedef struct S_ArtHeader {
     uchar ID[8];                    // protocol ID = "Art-Net"
-    ushort OpCode;                  // == OpPoll
+    ushort OpCode;
 } T_ArtHeader;
 
 typedef struct S_ArtDmxHeader {
@@ -44,29 +46,31 @@ typedef struct S_ArtDmxHeader {
 } T_ArtDmxHeader;
 
 typedef struct S_ArtConfig {
-    uint8_t  mac[6];
-    uint8_t  ip[4];
-    uint8_t  mask[4];
-    uint16_t udpPort;
-    uint8_t  dhcp;
-    uint8_t  net;
-    uint8_t  subnet;
-    char     shortName[18];
-    char     longName[64];
-    uint8_t  numPorts;
-    uint8_t  portTypes[4];
-    uint8_t  portAddrIn[4];
-    uint8_t  portAddrOut[4];
-    uint8_t  verHi;
-    uint8_t  verLo;
+    uchar  mac[6];
+    uchar  ip[4];
+    uchar  mask[4];
+    ushort udpPort;
+    uchar  dhcp;
+    uchar  net;
+    uchar  subnet;
+    char   shortName[18];
+    char   longName[64];
+    uchar  numPorts;
+    uchar  portTypes[4];
+    uchar  portAddrIn[4];
+    uchar  portAddrOut[4];
+    uchar  verHi;
+    uchar  verLo;
 } T_ArtConfig;
 
 typedef T_ArtHeader         ArtHeader;
 typedef T_ArtConfig         ArtConfig;
 typedef T_ArtPoll           ArtPoll;
-typedef T_ArtPollReply      ArtPollReply;
-typedef T_ArtDmx            ArtDmx;
+//typedef T_ArtPollReply      ArtPollReply;
+//typedef T_ArtDmx            ArtDmx;
+typedef T_ArtSync           ArtSync;
 typedef T_ArtDmxHeader      ArtDmxHeader;
+typedef T_ArtAddress        ArtAddress;
 typedef T_ArtIpProg         ArtIpProg;
 typedef T_ArtIpProgReply    ArtIpProgReply;
 
@@ -84,6 +88,7 @@ public:
 
     uint32_t broadcastIP();
     uint8_t getPort(uint8_t subUni, uint8_t net);
+    uint8_t getPort();
 
     void setPacketHeader();
     bool isPacketValid();
@@ -94,6 +99,8 @@ public:
     void createPoll(uint8_t talkToMe = 0, uint8_t priority = 0);
     void createPollReply();
     void createDmx(uint8_t net = 0, uint8_t subnet = 0, uint16_t length = 512);
+    void createSync();
+    void createAddress();
     void createIpProg();
     void createIpProgReply();
     

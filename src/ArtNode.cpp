@@ -51,15 +51,20 @@ uint32_t ArtNode::broadcastIP() {
 
 uint8_t ArtNode::getPort(uint8_t subUni, uint8_t net) {
     if ((net == config->net) && ((subUni >> 4) == config->subnet)) {
-        subUni &= 0x0F;
+        uint8_t uni = subUni & 0x0F;
         for (int i=0; i<config->numPorts; i++) {
-            if ((config->portTypes[i] & PortTypeInput) && (subUni == config->portAddrIn[i]))
+            if ((config->portTypes[i] & PortTypeInput) && (uni == config->portAddrIn[i]))
                 return i;
-            if ((config->portTypes[i] & PortTypeOutput) && (subUni == config->portAddrOut[i]))
+            if ((config->portTypes[i] & PortTypeOutput) && (uni == config->portAddrOut[i]))
                 return i;
         }
     }
     return -1;
+}
+
+uint8_t ArtNode::getPort() {
+    ArtDmx *dmx = (ArtDmx*)buffer;
+    return getPort(dmx->SubUni, dmx->Net);
 }
 
 void ArtNode::setPacketHeader() {
@@ -118,7 +123,7 @@ void ArtNode::createPollReply() {
     reply->Status2 = 0x8; // Supports 15bit address (ArtNet 3)
 }
 
-void ArtNode::createDmx(uint8_t net, uint8_t subnet, uint16_t length) {
+void ArtNode::createDmx(uint8_t net, uint8_t subuni, uint16_t length) {
     ArtDmx *dmx = (ArtDmx*)buffer;
     setPacketHeader();
     dmx->OpCode = OpDmx;
@@ -127,8 +132,34 @@ void ArtNode::createDmx(uint8_t net, uint8_t subnet, uint16_t length) {
     dmx->Sequence = 0;
     dmx->Physical = 0;
     dmx->Net = net;
-    dmx->SubUni = subnet;
+    dmx->SubUni = subuni;
     dmx->Length = ((length & 0xF) << 8) | (length >> 8);
+}
+
+void ArtNode::createSync() {
+    ArtSync *sync = (ArtSync*)buffer;
+    setPacketHeader();
+    sync->OpCode = OpSync;
+    sync->ProtVerHi = 0;
+    sync->ProtVerLo = ProtocolVersion;
+    sync->Aux1 = 0;
+    sync->Aux2 = 0;
+}
+
+void ArtNode::createAddress() {
+    ArtAddress *addr = (ArtAddress*)buffer;
+    memset(buffer, 0, sizeof(ArtAddress));
+    setPacketHeader();
+    addr->OpCode = OpAddress;
+    addr->ProtVerHi = 0;
+    addr->ProtVerLo = ProtocolVersion;
+    addr->NetSwitch = 0x7F;
+    addr->SubSwitch = 0x7F;
+    for (int i=0; i<4; i++) {
+        addr->SwIn[i] = 0x7F;
+        addr->SwOut[i] = 0x7F;
+    }
+    addr->Command = 0;
 }
 
 void ArtNode::createIpProgReply() {

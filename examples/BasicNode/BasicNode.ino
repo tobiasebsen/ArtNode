@@ -13,8 +13,6 @@ ArtConfig config = {
   {255, 0, 0, 0},                       // Subnet mask
   0x1936,                               // UDP port
   false,                                // DHCP
-
-  // These fields get overwritten by loadConfig:
   0, 0,                                 // Net (0-127) and subnet (0-15)
   "ArtNode",                            // Short name
   "ArtNode",                            // Long name
@@ -46,14 +44,13 @@ void loop() {
     int n = udp.read(buffer, sizeof(ArtHeader));
     if (n >= sizeof(ArtHeader)) {
 
-      ArtHeader* header = (ArtHeader*)buffer;
-      if (memcmp(header->ID, "Art-Net", 8) == 0) {
+      if (node.isPacketValid()) {
 
         // Read the rest of the packet
         udp.read(buffer + sizeof(ArtHeader), udp.available());
 
         // Package Op-Code determines type of packet
-        switch (header->OpCode) {
+        switch (node.getOpCode()) {
 
           // Poll packet. Send poll reply.
           case OpPoll:
