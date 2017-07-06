@@ -104,6 +104,11 @@ public:
     void createIpProg();
     void createIpProgReply();
     
+    template<typename T>
+    T* getDataAs() {
+        return (T*)buffer;
+    }
+    
 protected:
 
     ArtConfig *config;

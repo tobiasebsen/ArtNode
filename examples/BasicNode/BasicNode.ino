@@ -1,4 +1,3 @@
-#include "FastLED.h"
 #include <SPI.h>
 #include <Ethernet.h>
 #include <ArtNode.h>
@@ -8,8 +7,8 @@
 
 ////////////////////////////////////////////////////////////
 ArtConfig config = {
-  {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}, // MAC - last 3 bytes set by Teensy
-  {2, 0, 0, 1},                         // IP
+  {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}, // MAC
+  {2, 3, 4, 5},                         // IP
   {255, 0, 0, 0},                       // Subnet mask
   0x1936,                               // UDP port
   false,                                // DHCP
@@ -41,40 +40,35 @@ void loop() {
   
   while (udp.parsePacket()) {
 
-    int n = udp.read(buffer, sizeof(ArtHeader));
-    if (n >= sizeof(ArtHeader)) {
+    int n = udp.read(buffer, min(udp.available(), sizeof(buffer)));
+    if (n >= sizeof(ArtHeader) && node.isPacketValid()) {
 
-      if (node.isPacketValid()) {
+      // Package Op-Code determines type of packet
+      switch (node.getOpCode()) {
 
-        // Read the rest of the packet
-        udp.read(buffer + sizeof(ArtHeader), udp.available());
+        // Poll packet. Send poll reply.
+        case OpPoll: {
+          ArtPoll* poll = (ArtPoll*)buffer;
+          node.createPollReply();
+          udp.beginPacket(node.broadcastIP(), config.udpPort);
+          udp.write(buffer, sizeof(ArtPollReply));
+          udp.endPacket();
+        } break;
 
-        // Package Op-Code determines type of packet
-        switch (node.getOpCode()) {
+        // DMX packet
+        case OpDmx: {
+            ArtDmx* dmx = (ArtDmx*)buffer;
+            int port = node.getPort(dmx->SubUni, dmx->Net);
+            int len = dmx->getLength();
+            byte *data = dmx->Data;
+            if (port >= 0 && port < config.numPorts) {
+            }
+        } break;
 
-          // Poll packet. Send poll reply.
-          case OpPoll:
-            node.createPollReply();
-            artnetSend(buffer, sizeof(ArtPollReply));
-            break;
-
-          // DMX packet
-          case OpDmx: {
-              ArtDmx* dmx = (ArtDmx*)buffer;
-              int port = node.getPort(dmx->SubUni, dmx->Net);
-          } break;
-
-          default:
-            break;
-        }
+        default:
+          break;
       }
     }
   }
 }
 
-////////////////////////////////////////////////////////////
-void artnetSend(byte* buffer, int length) {
-  udp.beginPacket(node.broadcastIP(), config.udpPort);
-  udp.write(buffer, length);
-  udp.endPacket();
-}
