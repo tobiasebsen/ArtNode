@@ -34,7 +34,7 @@ public:
         return ((this->Length & 0xF) << 8) | ((this->Length & 0xF0) >> 8);
     }
     void setLength(ushort length) {
-        return ((length & 0xF) << 8) | ((length & 0xF0) >> 8);
+        this->Length = ((length & 0xF) << 8) | ((length & 0xF0) >> 8);
     }
 };
 
