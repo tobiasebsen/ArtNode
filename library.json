@@ -1,0 +1,19 @@
+{
+    "name": "ArtNode",
+    "keywords": "artnet, ethernet, dmx, lighting",
+    "description": "Art-Net library for Arduino, Teensy, etc.",
+    "authors":
+    {
+        "name": "Tobias Ebsen",
+        "email": "tobiasebsen@gmail.com",
+        "url": "https://github.com/tobiasebsen/",
+        "maintainer": true
+    },
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/tobiasebsen/artnode"
+    },
+    "frameworks": "arduino, teensy",
+    "platforms": "*"
+}
