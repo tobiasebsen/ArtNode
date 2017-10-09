@@ -13,11 +13,11 @@
 class ArtDmx : public T_ArtDmx {
 public:
     
-    uchar getSubSwitch() {
-        return this->SubUni & 0xF;
+    uchar getSub() {
+        return (this->SubUni >> 4) & 0xF;
     }
     uchar getUni() {
-        return (this->SubUni >> 4) & 0xF;
+        return this->SubUni & 0xF;
     }
     void setSubUni(uchar sub, uchar uni) {
         this->SubUni = ((sub & 0xF) << 4) | (uni & 0xF);

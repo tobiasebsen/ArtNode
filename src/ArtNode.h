@@ -85,24 +85,27 @@ public:
 
     unsigned char* getBufferData();
     unsigned int getBufferSize();
+	unsigned int getPacketSize();
 
     uint32_t broadcastIP();
-    uint8_t getPort(uint8_t subUni, uint8_t net);
+    uint8_t getPort(uint8_t net, uint8_t subUni);
     uint8_t getPort();
 
+	static void setPacketHeader(unsigned char * buffer);
     void setPacketHeader();
     bool isPacketValid();
 
     uint16_t getOpCode();
-    void setOpCode(uint16_t opCode);
+	static void setOpCode(unsigned char * buffer, uint16_t opCode);
+	void setOpCode(uint16_t opCode);
     
-    void createPoll(uint8_t talkToMe = 0, uint8_t priority = 0);
-    void createPollReply();
-    void createDmx(uint8_t net = 0, uint8_t subnet = 0, uint16_t length = 512);
-    void createSync();
-    void createAddress();
-    void createIpProg();
-    void createIpProgReply();
+    ArtPoll *		createPoll(uint8_t talkToMe = 0, uint8_t priority = 0);
+    ArtPollReply *	createPollReply();
+    ArtDmx *		createDmx(uint8_t net = 0, uint8_t subnet = 0, uint16_t length = 512);
+    ArtSync *		createSync();
+    ArtAddress *	createAddress();
+    ArtIpProg *		createIpProg();
+    ArtIpProgReply *createIpProgReply();
     
     template<typename T>
     T* getDataAs() {
@@ -115,6 +118,7 @@ protected:
 
     unsigned char * buffer;
     int bufferSize;
+	int packetSize;
 };
 
 #endif
