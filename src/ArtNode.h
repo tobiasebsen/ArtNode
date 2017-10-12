@@ -96,7 +96,6 @@ public:
     bool isPacketValid();
 
     uint16_t getOpCode();
-	static void setOpCode(unsigned char * buffer, uint16_t opCode);
 	void setOpCode(uint16_t opCode);
     
     ArtPoll *		createPoll(uint8_t talkToMe = 0, uint8_t priority = 0);

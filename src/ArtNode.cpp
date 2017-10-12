@@ -51,8 +51,8 @@ unsigned int ArtNode::getPacketSize() {
 }
 
 uint32_t ArtNode::broadcastIP() {
-    uint32_t mask = config->mask[0] | (config->mask[1] << 8) | (config->mask[2] << 16) | (config->mask[3] << 24);
-    uint32_t ip = config->ip[0] | (config->ip[1] << 8) | (config->ip[2] << 16) | (config->ip[3] << 24);
+    uint32_t mask = (config->mask[0] << 0) | (config->mask[1] << 8) | (config->mask[2] << 16) | (config->mask[3] << 24);
+    uint32_t ip = (config->ip[0] << 0) | (config->ip[1] << 8) | (config->ip[2] << 16) | (config->ip[3] << 24);
     return (~mask) | ip;
 }
 
@@ -72,6 +72,10 @@ uint8_t ArtNode::getPort(uint8_t net, uint8_t subUni) {
 uint8_t ArtNode::getPort() {
     ArtDmx *dmx = (ArtDmx*)buffer;
     return getPort(dmx->Net, dmx->SubUni);
+}
+
+void ArtNode::setPacketHeader(unsigned char * buffer) {
+	memcpy(buffer, "Art-Net", 8);
 }
 
 void ArtNode::setPacketHeader() {
@@ -146,6 +150,7 @@ ArtDmx * ArtNode::createDmx(uint8_t net, uint8_t subuni, uint16_t length) {
     dmx->Net = net;
     dmx->SubUni = subuni;
     dmx->Length = ((length & 0xF) << 8) | (length >> 8);
+	packetSize = sizeof(ArtDmx);
 	return dmx;
 }
 
