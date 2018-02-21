@@ -149,7 +149,7 @@ ArtDmx * ArtNode::createDmx(uint8_t net, uint8_t subuni, uint16_t length) {
     dmx->Physical = 0;
     dmx->Net = net;
     dmx->SubUni = subuni;
-    dmx->Length = ((length & 0xF) << 8) | (length >> 8);
+    dmx->Length = ((length & 0xFF) << 8) | (length >> 8);
 	packetSize = sizeof(ArtDmx);
 	return dmx;
 }
