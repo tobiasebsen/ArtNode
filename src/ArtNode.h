@@ -91,6 +91,7 @@ public:
 	unsigned int getPacketSize();
 
     uint32_t broadcastIP();
+    uint8_t getPort(uint8_t net, uint8_t sub, uint8_t uni);
     uint8_t getPort(uint8_t net, uint8_t subUni);
     uint8_t getPort();
 
