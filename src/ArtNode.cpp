@@ -215,3 +215,25 @@ ArtIpProgReply * ArtNode::createIpProgReply() {
 	packetSize = sizeof(ArtIpProgReply);
 	return reply;
 }
+
+void ArtNode::handleAddress(ArtAddress * address) {
+
+    if (address->NetSwitch & 0x80)
+        config->net = address->NetSwitch & 0x7F;
+    
+    if (address->SubSwitch & 0x80)
+        config->subnet = address->SubSwitch & 0x0F;
+    
+    if (address->LongName[0] != 0)
+        memcpy(config->longName, address->LongName, 64);
+    if (address->ShortName[0] != 0)
+        memcpy(config->shortName, address->ShortName, 18);
+    
+    for (int i = 0; i < 4; i++) {
+        if (address->SwIn[i] & 0x80)
+            config->portAddrIn[i] = address->SwIn[i];
+        if (address->SwOut[i] & 0x80) {
+            config->portAddrOut[i] = address->SwOut[i];
+        }
+    }
+}
