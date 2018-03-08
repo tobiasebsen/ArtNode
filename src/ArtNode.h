@@ -16,7 +16,8 @@
 #ifndef ArtNode_h
 #define ArtNode_h
 
-#pragma pack(1)
+#pragma pack(push, 1)
+
 #include "Art-Net.h"
 #include "ArtPollReply.h"
 #include "ArtDmx.h"
@@ -62,6 +63,8 @@ typedef struct S_ArtConfig {
     uchar  verHi;
     uchar  verLo;
 } T_ArtConfig;
+
+#pragma pack(pop)
 
 typedef T_ArtHeader         ArtHeader;
 typedef T_ArtConfig         ArtConfig;

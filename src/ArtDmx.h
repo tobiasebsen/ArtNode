@@ -38,7 +38,7 @@ public:
     }
 
     ushort getSize() {
-        int header = (this->Data - this->ID) + getLength();
+        return (this->Data - this->ID) + getLength();
     }
 };
 
