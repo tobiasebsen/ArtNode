@@ -1354,7 +1354,7 @@ typedef struct S_ArtDirectoryReply
 
 typedef struct S_ArtDirectoryList
 	{
-	T_ArtDirectoryReply Dir[MaxUserFiles]; // List of all user files available from node
+	T_ArtDirectoryReply Dir[0]; // List of all user files available from node
 
 	} T_ArtDirectoryList;
 
