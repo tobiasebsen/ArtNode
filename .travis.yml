@@ -12,7 +12,7 @@ before_install:
   - sudo ln -s /usr/local/share/arduino/arduino /usr/local/bin/arduino
 
   # move this library to the arduino libraries folder
-  - ln -s $PWD $HOME/arduino_ide/libraries/ArtNode
+  - ln -s $PWD /usr/local/share/arduino/libraries/ArtNode
 
 script:
   - arduino --verify --board arduino:avr:uno $PWD/examples/BasicNode/BasicNode.ino
