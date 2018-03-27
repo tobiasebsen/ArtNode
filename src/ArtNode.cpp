@@ -51,8 +51,8 @@ unsigned int ArtNode::getPacketSize() {
 }
 
 uint32_t ArtNode::broadcastIP() {
-    uint32_t mask = (config->mask[0] << 0) | (config->mask[1] << 8) | (config->mask[2] << 16) | (config->mask[3] << 24);
-    uint32_t ip = (config->ip[0] << 0) | (config->ip[1] << 8) | (config->ip[2] << 16) | (config->ip[3] << 24);
+    uint32_t mask = ((uint32_t)config->mask[0] << 0) | ((uint32_t)config->mask[1] << 8) | ((uint32_t)config->mask[2] << 16) | ((uint32_t)config->mask[3] << 24);
+    uint32_t ip = ((uint32_t)config->ip[0] << 0) | ((uint32_t)config->ip[1] << 8) | ((uint32_t)config->ip[2] << 16) | ((uint32_t)config->ip[3] << 24);
     return (~mask) | ip;
 }
 
