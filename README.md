@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/tobiasebsen/ArtNode.svg?branch=master)](https://travis-ci.org/tobiasebsen/ArtNode)
+
 Introduction
 ------------
 C++ library providing data structures and classes for implementing an Art-Net node on various platforms, including Arduino, Teensy, and similar embedded devices.

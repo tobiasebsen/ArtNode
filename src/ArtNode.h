@@ -85,22 +85,22 @@ public:
     ArtNode(ArtConfig & config, int size, unsigned char * buffer);
     
     ArtConfig * getConfig();
+    uint32_t broadcastIP();
 
     unsigned char* getBufferData();
     unsigned int getBufferSize();
-	unsigned int getPacketSize();
+    unsigned int getPacketSize();
 
-    uint32_t broadcastIP();
     uint8_t getPort(uint8_t net, uint8_t sub, uint8_t uni);
     uint8_t getPort(uint8_t net, uint8_t subUni);
     uint8_t getPort();
 
-	static void setPacketHeader(unsigned char * buffer);
+    static void setPacketHeader(unsigned char * buffer);
     void setPacketHeader();
     bool isPacketValid();
 
     uint16_t getOpCode();
-	void setOpCode(uint16_t opCode);
+    void setOpCode(uint16_t opCode);
     
     ArtPoll *		createPoll(uint8_t talkToMe = 0, uint8_t priority = 0);
     ArtPollReply *	createPollReply();
@@ -110,6 +110,8 @@ public:
     ArtIpProg *		createIpProg();
     ArtIpProgReply *createIpProgReply();
     
+    void handleAddress(ArtAddress * address);
+
     template<typename T>
     T* getDataAs() {
         return (T*)buffer;
