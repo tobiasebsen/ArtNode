@@ -38,6 +38,10 @@ ArtNode::ArtNode(ArtConfig & config, int size, unsigned char * buffer) {
 	this->packetSize = 0;
 }
 
+ArtConfig * ArtNode::getConfig() {
+	return config;
+}
+
 unsigned char * ArtNode::getBufferData() {
     return buffer;
 }
