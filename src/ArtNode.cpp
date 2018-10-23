@@ -143,6 +143,7 @@ ArtPollReply * ArtNode::createPollReply() {
     reply->Style = StyleNode;
     memcpy(reply->Mac, config->mac, 6);
     reply->Status2 = 0x8; // Supports 15bit address (ArtNet 3)
+    memcpy(reply->BindIp, config->ip, 4);
 
 	packetSize = sizeof(ArtPollReply);
 	return reply;
