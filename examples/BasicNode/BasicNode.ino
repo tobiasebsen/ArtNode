@@ -58,7 +58,7 @@ void loop() {
         // DMX packet
         case OpDmx: {
             ArtDmx* dmx = (ArtDmx*)buffer;
-            int port = node.getPort(dmx->SubUni, dmx->Net);
+            int port = node.getPort(dmx->Net, dmx->SubUni);
             int len = dmx->getLength();
             byte *data = dmx->Data;
             if (port >= 0 && port < config.numPorts) {
