@@ -60,6 +60,13 @@ uint32_t ArtNode::broadcastIP() {
     return (~mask) | ip;
 }
 
+uint16_t ArtNode::getAddress(uint8_t subUni, uint8_t net) {
+    return subUni + (net << 8);
+}
+uint16_t ArtNode::getStartAddress() {
+    return config->portAddrOut[0] + (config->subnet << 4) + (config->net << 8);
+}
+
 uint8_t ArtNode::getPort(uint8_t net, uint8_t sub, uint8_t uni) {
     if ((net == config->net) && (sub == config->subnet)) {
         for (int i=0; i<config->numPorts; i++) {

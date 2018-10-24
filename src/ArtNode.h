@@ -91,6 +91,9 @@ public:
     unsigned int getBufferSize();
     unsigned int getPacketSize();
 
+    uint16_t getAddress(uint8_t subUni, uint8_t net);
+    uint16_t getStartAddress();
+
     uint8_t getPort(uint8_t net, uint8_t sub, uint8_t uni);
     uint8_t getPort(uint8_t net, uint8_t subUni);
     uint8_t getPort();
