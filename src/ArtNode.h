@@ -83,7 +83,7 @@ public:
     ArtNode(ArtConfig & config);
     ArtNode(ArtConfig & config, int size);
     ArtNode(ArtConfig & config, int size, unsigned char * buffer);
-    
+
     ArtConfig * getConfig();
     uint32_t broadcastIP();
 
@@ -101,22 +101,23 @@ public:
 
     uint16_t getOpCode();
     void setOpCode(uint16_t opCode);
-    
+
     ArtPoll *		createPoll(uint8_t talkToMe = 0, uint8_t priority = 0);
+    ArtPollReply *	createPollReply(uint8_t bindIndex, uint8_t numPortsLo, uint8_t portTypes[4], uint8_t portAddrIn[4], uint8_t portAddrOut[4]);
     ArtPollReply *	createPollReply();
     ArtDmx *		createDmx(uint8_t net = 0, uint8_t subnet = 0, uint16_t length = 512);
     ArtSync *		createSync();
     ArtAddress *	createAddress();
     ArtIpProg *		createIpProg();
     ArtIpProgReply *createIpProgReply();
-    
+
     void handleAddress(ArtAddress * address);
 
     template<typename T>
     T* getDataAs() {
         return (T*)buffer;
     }
-    
+
 protected:
 
     ArtConfig *config;

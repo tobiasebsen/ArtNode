@@ -1,6 +1,6 @@
 /*
  *  ArtNode.cpp
- *  
+ *
  *  Created by Tobias Ebsen
  *
  *  19/06/17 - More functions
@@ -116,30 +116,32 @@ ArtPoll * ArtNode::createPoll(uint8_t talkToMe, uint8_t priority) {
 	return poll;
 }
 
-ArtPollReply * ArtNode::createPollReply() {
+ArtPollReply * ArtNode::createPollReply(uint8_t bindIndex, uint8_t numPortsLo, uint8_t portTypes[4], uint8_t portAddrIn[4], uint8_t portAddrOut[4]) {
     ArtPollReply *reply = (ArtPollReply*)buffer;
     memset(buffer, 0, sizeof(ArtPollReply));
-    
+
     setPacketHeader();
     reply->OpCode = OpPollReply;
     memcpy(reply->BoxAddr.IP, config->ip, 4);
     reply->BoxAddr.Port = config->udpPort;
-    
+
     reply->VersionInfoHi = config->verHi;
     reply->VersionInfoLo = config->verLo;
-    
+
     reply->NetSwitch = config->net;
     reply->SubSwitch = config->subnet;
 
     strcpy((char*)reply->ShortName, config->shortName);
     strcpy((char*)reply->LongName, config->longName);
-    
-    reply->NumPortsLo = config->numPorts;
-    memcpy(reply->PortTypes, config->portTypes, 4);
-    memset(reply->GoodInput, 0x8, config->numPorts); // Input disabled
-    memset(reply->GoodOutput, 0x80, config->numPorts); // Very important for MadMapper!
-    memcpy(reply->SwIn, config->portAddrIn, 4);
-    memcpy(reply->SwOut, config->portAddrOut, 4);
+
+    reply->NumPortsLo = numPortsLo;
+    memcpy(reply->PortTypes, portTypes, 4);
+    memset(reply->GoodInput, 0x8, numPortsLo); // Input disabled
+    memset(reply->GoodOutput, 0x80, numPortsLo); // Very important for MadMapper!
+    memcpy(reply->SwIn, portAddrIn, 4);
+    memcpy(reply->SwOut, portAddrOut, 4);
+    reply->BindIndex = bindIndex;
+
     reply->Style = StyleNode;
     memcpy(reply->Mac, config->mac, 6);
     reply->Status2 = 0x8; // Supports 15bit address (ArtNet 3)
@@ -147,6 +149,10 @@ ArtPollReply * ArtNode::createPollReply() {
 
 	packetSize = sizeof(ArtPollReply);
 	return reply;
+}
+
+ArtPollReply * ArtNode::createPollReply() {
+    return createPollReply(1, config->numPorts, config->portTypes, config->portAddrIn, config->portAddrOut);
 }
 
 ArtDmx * ArtNode::createDmx(uint8_t net, uint8_t subuni, uint16_t length) {
@@ -197,18 +203,18 @@ ArtAddress * ArtNode::createAddress() {
 ArtIpProgReply * ArtNode::createIpProgReply() {
     ArtIpProgReply *reply = (ArtIpProgReply*)buffer;
     memset(buffer, 0, sizeof(ArtIpProgReply));
-    
+
     setPacketHeader();
     reply->OpCode = OpIpProgReply;
-    
+
     reply->ProtVerHi = 0;
     reply->ProtVerLo = ProtocolVersion;
-    
+
     reply->ProgIpHi = config->ip[0];
     reply->ProgIp2 = config->ip[1];
     reply->ProgIp1 = config->ip[2];
     reply->ProgIpLo = config->ip[3];
-    
+
     reply->ProgSmHi = config->mask[0];
     reply->ProgSm2 = config->mask[1];
     reply->ProgSm1 = config->mask[2];
@@ -225,15 +231,15 @@ void ArtNode::handleAddress(ArtAddress * address) {
 
     if (address->NetSwitch & 0x80)
         config->net = address->NetSwitch & 0x7F;
-    
+
     if (address->SubSwitch & 0x80)
         config->subnet = address->SubSwitch & 0x0F;
-    
+
     if (address->LongName[0] != 0)
         memcpy(config->longName, address->LongName, 64);
     if (address->ShortName[0] != 0)
         memcpy(config->shortName, address->ShortName, 18);
-    
+
     for (int i = 0; i < 4; i++) {
         if (address->SwIn[i] & 0x80)
             config->portAddrIn[i] = address->SwIn[i];
