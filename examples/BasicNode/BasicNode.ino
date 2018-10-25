@@ -36,7 +36,7 @@ ArtNode node = ArtNode(config, sizeof(buffer), buffer);
 ////////////////////////////////////////////////////////////
 void setup() {
 
-  Ethernet.begin(config.mac, config.ip,  gateway, gateway, config.subnet);
+  Ethernet.begin(config.mac, config.ip,  gateway, gateway, config.mask);
   udp.begin(config.udpPort);
 }
 
