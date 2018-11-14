@@ -22,6 +22,9 @@ public:
     void setSubUni(uchar sub, uchar uni) {
         this->SubUni = ((sub & 0xF) << 4) | (uni & 0xF);
     }
+    void setSubUni(uchar subuni) {
+        this->SubUni = subuni;
+    }
     
     uchar getNet() {
         return this->Net;
