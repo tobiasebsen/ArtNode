@@ -12,6 +12,16 @@
 
 class ArtDmx : public T_ArtDmx {
 public:
+	ArtDmx() {
+		this->OpCode = OpDmx;
+		this->ProtVerHi = 0;
+		this->ProtVerLo = ProtocolVersion;
+		this->Sequence = 0;
+		this->Physical = 0;
+		setSubUni(0, 0);
+		setNet(0);
+		setLength(sizeof(Data));
+	}
     
     uchar getSub() {
         return (this->SubUni >> 4) & 0xF;

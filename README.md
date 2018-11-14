@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/tobiasebsen/ArtNode.svg?branch=master)](https://travis-ci.org/tobiasebsen/ArtNode)
+
 Introduction
 ------------
 C++ library providing data structures and classes for implementing an Art-Net node on various platforms, including Arduino, Teensy, and similar embedded devices.
@@ -34,20 +36,21 @@ Usage
 Configuration is set and stored in a simple struct.
 ```c++
 ArtConfig config = {
-  {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}, // MAC hardware address
-  {2, 0, 0, 1},                         // IP address
-  {255, 0, 0, 0},                       // Subnet mask
-  0x1936,                               // UDP port
-  false,                                // DHCP
-  0, 0,                                 // Net (0-127) and subnet (0-15)
-  "ArtNode",                            // Short name
-  "ArtNode",                            // Long name
-  4,                                    // Number of ports
-  {PortTypeDmx | PortTypeOutput, PortTypeDmx | PortTypeOutput, PortTypeDmx | PortTypeOutput, PortTypeDmx | PortTypeOutput}, // Port types
-  {0, 0, 0, 0},                         // Port input universes (0-15)
-  {0, 1, 2, 3},                         // Port output universes (0-15)
-  VERSION_HI,
-  VERSION_LO
+  .mac =  {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}, // MAC
+  .ip =   {2, 3, 4, 5},                         // IP
+  .mask = {255, 0, 0, 0},                       // Subnet mask
+  .udpPort = 0x1936,
+  .dhcp = false,
+  .net = 0, // Net (0-127)
+  .subnet = 0,  // Subnet (0-15)
+  "ArtNode", // Short name
+  "ArtNode", // Long name
+  .numPorts = 4,
+  .portTypes = { PortTypeDmxOutput, PortTypeDmxOutput, PortTypeDmxOutput, PortTypeDmxOutput },
+  .portAddrIn = {0, 0, 0, 0}, // Port input universes (0-15)
+  .portAddrOut = {0, 1, 2, 3}, // Port output universes (0-15)
+  .verHi = VERSION_HI,
+  .verLo = VERSION_LO
 };
 ```
 #### Constructor

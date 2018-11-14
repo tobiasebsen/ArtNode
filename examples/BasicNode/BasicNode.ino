@@ -7,20 +7,25 @@
 
 ////////////////////////////////////////////////////////////
 ArtConfig config = {
-  {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}, // MAC
-  {2, 3, 4, 5},                         // IP
-  {255, 0, 0, 0},                       // Subnet mask
-  0x1936,                               // UDP port
-  false,                                // DHCP
-  0, 0,                                 // Net (0-127) and subnet (0-15)
-  "ArtNode",                            // Short name
-  "ArtNode",                            // Long name
-  4,                                    // Number of ports
-  {PortTypeDmx | PortTypeOutput, PortTypeDmx | PortTypeOutput, PortTypeDmx | PortTypeOutput, PortTypeDmx | PortTypeOutput}, // Port types
-  {0, 0, 0, 0},                         // Port input universes (0-15)
-  {0, 1, 2, 3},                         // Port output universes (0-15)
-  VERSION_HI,
-  VERSION_LO
+  .mac =  {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}, // MAC
+  .ip =   {2, 3, 4, 5},                         // IP
+  .mask = {255, 0, 0, 0},                       // Subnet mask
+  .udpPort = 0x1936,
+  .dhcp = false,
+  .net = 0, // Net (0-127)
+  .subnet = 0,  // Subnet (0-15)
+  "ArtNode", // Short name
+  "ArtNode", // Long name
+  .numPorts = 4,
+  .portTypes = {
+    PortTypeDmx | PortTypeOutput,
+    PortTypeDmx | PortTypeOutput,
+    PortTypeDmx | PortTypeOutput,
+    PortTypeDmx | PortTypeOutput},
+  .portAddrIn = {0, 0, 0, 0}, // Port input universes (0-15)
+  .portAddrOut = {0, 1, 2, 3}, // Port output universes (0-15)
+  .verHi = VERSION_HI,
+  .verLo = VERSION_LO
 };
 ////////////////////////////////////////////////////////////
 IPAddress gateway(config.ip[0], 0, 0, 1);
@@ -31,7 +36,7 @@ ArtNode node = ArtNode(config, sizeof(buffer), buffer);
 ////////////////////////////////////////////////////////////
 void setup() {
 
-  Ethernet.begin(config.mac, config.ip,  gateway, gateway, config.subnet);
+  Ethernet.begin(config.mac, config.ip,  gateway, gateway, config.mask);
   udp.begin(config.udpPort);
 }
 
@@ -58,7 +63,7 @@ void loop() {
         // DMX packet
         case OpDmx: {
             ArtDmx* dmx = (ArtDmx*)buffer;
-            int port = node.getPort(dmx->SubUni, dmx->Net);
+            int port = node.getPort(dmx->Net, dmx->SubUni);
             int len = dmx->getLength();
             byte *data = dmx->Data;
             if (port >= 0 && port < config.numPorts) {

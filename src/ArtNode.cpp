@@ -38,6 +38,10 @@ ArtNode::ArtNode(ArtConfig & config, int size, unsigned char * buffer) {
 	this->packetSize = 0;
 }
 
+ArtConfig * ArtNode::getConfig() {
+	return config;
+}
+
 unsigned char * ArtNode::getBufferData() {
     return buffer;
 }
@@ -51,8 +55,8 @@ unsigned int ArtNode::getPacketSize() {
 }
 
 uint32_t ArtNode::broadcastIP() {
-    uint32_t mask = (config->mask[0] << 0) | (config->mask[1] << 8) | (config->mask[2] << 16) | (config->mask[3] << 24);
-    uint32_t ip = (config->ip[0] << 0) | (config->ip[1] << 8) | (config->ip[2] << 16) | (config->ip[3] << 24);
+    uint32_t mask = ((uint32_t)config->mask[0] << 0) | ((uint32_t)config->mask[1] << 8) | ((uint32_t)config->mask[2] << 16) | ((uint32_t)config->mask[3] << 24);
+    uint32_t ip = ((uint32_t)config->ip[0] << 0) | ((uint32_t)config->ip[1] << 8) | ((uint32_t)config->ip[2] << 16) | ((uint32_t)config->ip[3] << 24);
     return (~mask) | ip;
 }
 
@@ -139,6 +143,7 @@ ArtPollReply * ArtNode::createPollReply() {
     reply->Style = StyleNode;
     memcpy(reply->Mac, config->mac, 6);
     reply->Status2 = 0x8; // Supports 15bit address (ArtNet 3)
+    memcpy(reply->BindIp, config->ip, 4);
 
 	packetSize = sizeof(ArtPollReply);
 	return reply;
@@ -214,4 +219,26 @@ ArtIpProgReply * ArtNode::createIpProgReply() {
     reply->Status = config->dhcp ? 0 : 0x40;
 	packetSize = sizeof(ArtIpProgReply);
 	return reply;
+}
+
+void ArtNode::handleAddress(ArtAddress * address) {
+
+    if (address->NetSwitch & 0x80)
+        config->net = address->NetSwitch & 0x7F;
+    
+    if (address->SubSwitch & 0x80)
+        config->subnet = address->SubSwitch & 0x0F;
+    
+    if (address->LongName[0] != 0)
+        memcpy(config->longName, address->LongName, 64);
+    if (address->ShortName[0] != 0)
+        memcpy(config->shortName, address->ShortName, 18);
+    
+    for (int i = 0; i < 4; i++) {
+        if (address->SwIn[i] & 0x80)
+            config->portAddrIn[i] = address->SwIn[i];
+        if (address->SwOut[i] & 0x80) {
+            config->portAddrOut[i] = address->SwOut[i];
+        }
+    }
 }
