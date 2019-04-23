@@ -29,6 +29,10 @@
 #define PortTypeInput   0x40
 #define PortTypeOutput  0x80
 
+#define PortTypeDmxOutput	(PortTypeDmx | PortTypeOutput)
+#define PortTypeDmxInput	(PortTypeDmx | PortTypeInput)
+
+
 typedef struct S_ArtHeader {
     uchar ID[8];                    // protocol ID = "Art-Net"
     ushort OpCode;

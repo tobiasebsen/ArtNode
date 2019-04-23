@@ -38,6 +38,10 @@ ArtNode::ArtNode(ArtConfig & config, int size, unsigned char * buffer) {
 	this->packetSize = 0;
 }
 
+ArtConfig * ArtNode::getConfig() {
+	return config;
+}
+
 unsigned char * ArtNode::getBufferData() {
     return buffer;
 }
@@ -139,6 +143,7 @@ ArtPollReply * ArtNode::createPollReply() {
     reply->Style = StyleNode;
     memcpy(reply->Mac, config->mac, 6);
     reply->Status2 = 0x8; // Supports 15bit address (ArtNet 3)
+    memcpy(reply->BindIp, config->ip, 4);
 
 	packetSize = sizeof(ArtPollReply);
 	return reply;
