@@ -56,7 +56,7 @@ uint32_t ArtNode::broadcastIP() {
     return (~mask) | ip;
 }
 
-uint8_t ArtNode::getPort(uint8_t net, uint8_t sub, uint8_t uni) {
+int ArtNode::getPort(uint8_t net, uint8_t sub, uint8_t uni) {
     if ((net == config->net) && (sub == config->subnet)) {
         for (int i=0; i<config->numPorts; i++) {
             if ((config->portTypes[i] & PortTypeInput) && (uni == config->portAddrIn[i]))
@@ -68,13 +68,13 @@ uint8_t ArtNode::getPort(uint8_t net, uint8_t sub, uint8_t uni) {
     return -1;
 }
 
-uint8_t ArtNode::getPort(uint8_t net, uint8_t subUni) {
+int ArtNode::getPort(uint8_t net, uint8_t subUni) {
     uint8_t sub = subUni >> 4;
     uint8_t uni = subUni & 0x0F;
     return getPort(net, sub, uni);
 }
 
-uint8_t ArtNode::getPort() {
+int ArtNode::getPort() {
     ArtDmx *dmx = (ArtDmx*)buffer;
     return getPort(dmx->Net, dmx->SubUni);
 }

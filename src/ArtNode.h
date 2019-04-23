@@ -91,9 +91,9 @@ public:
     unsigned int getBufferSize();
     unsigned int getPacketSize();
 
-    uint8_t getPort(uint8_t net, uint8_t sub, uint8_t uni);
-    uint8_t getPort(uint8_t net, uint8_t subUni);
-    uint8_t getPort();
+    int getPort(uint8_t net, uint8_t sub, uint8_t uni);
+    int getPort(uint8_t net, uint8_t subUni);
+    int getPort();
 
     static void setPacketHeader(unsigned char * buffer);
     void setPacketHeader();
