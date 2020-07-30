@@ -236,9 +236,9 @@ void ArtNode::handleAddress(ArtAddress * address) {
     
     for (int i = 0; i < 4; i++) {
         if (address->SwIn[i] & 0x80)
-            config->portAddrIn[i] = address->SwIn[i];
+            config->portAddrIn[i] = address->SwIn[i] & 0x7F;
         if (address->SwOut[i] & 0x80) {
-            config->portAddrOut[i] = address->SwOut[i];
+            config->portAddrOut[i] = address->SwOut[i] & 0x7F;
         }
     }
 }
